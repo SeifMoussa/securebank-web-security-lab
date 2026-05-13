@@ -46,7 +46,7 @@ SecureBank Web Security Lab is a deliberately small server-rendered FastAPI appl
 - ruff
 - Docker Compose
 
-Configured but not yet verified on GitHub: GitHub Actions CI, CodeQL, and optional OWASP ZAP baseline workflow.
+Verified on GitHub: GitHub Actions CI, CodeQL, Docker smoke, and OWASP ZAP baseline workflow.
 
 ## Security Controls
 
