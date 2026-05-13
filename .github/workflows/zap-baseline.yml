@@ -31,10 +31,10 @@ jobs:
       - name: Run ZAP baseline
         uses: zaproxy/action-baseline@v0.14.0
         with:
-          target: http://localhost:8000
+          target: http://localhost:8000/login
           fail_action: false
           allow_issue_writing: false
-          cmd_options: "-a -I -J zap-report.json -w zap-report.md -r zap-report.html"
+          cmd_options: "-a -I"
 
       - name: Fail on HIGH findings only
         run: |
@@ -42,9 +42,9 @@ jobs:
           import json
           from pathlib import Path
 
-          report_path = Path("zap-report.json")
+          report_path = Path("report_json.json")
           if not report_path.exists():
-              raise SystemExit("zap-report.json was not created")
+              raise SystemExit("report_json.json was not created")
 
           report = json.loads(report_path.read_text(encoding="utf-8"))
           high_findings = []
@@ -78,9 +78,9 @@ jobs:
         with:
           name: zap-baseline-report
           path: |
-            zap-report.json
-            zap-report.md
-            zap-report.html
+            report_json.json
+            report_md.md
+            report_html.html
 
       - name: Docker logs on failure
         if: failure()
