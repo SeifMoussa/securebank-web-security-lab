@@ -1,6 +1,6 @@
 """Fictional lab-credit banking routes."""
 
-from typing import Annotated
+from typing import Annotated, Literal
 
 from fastapi import APIRouter, Depends, Form, Request, status
 from fastapi.responses import HTMLResponse, RedirectResponse
@@ -23,6 +23,19 @@ from securebank.security.sessions import clear_session_cookie, get_session_data
 
 router = APIRouter()
 
+AuthzDeniedReason = Literal["missing_session", "invalid_session"]
+
+TRANSFER_ERROR_MESSAGES = {
+    "invalid_amount": "Amount must be a positive whole number.",
+    "invalid_memo": "Memo is too long.",
+    "sender_account_missing": "Sender account was not found.",
+    "recipient_not_found": "Recipient was not found.",
+    "self_transfer": "Self-transfer is not allowed.",
+    "recipient_account_missing": "Recipient account was not found.",
+    "insufficient_funds": "Insufficient lab credits.",
+    "transfer_rollback": "Transfer could not be completed.",
+}
+
 
 def _settings(request: Request):
     return request.app.state.settings
@@ -36,27 +49,31 @@ def _request_id(request: Request) -> str | None:
     return getattr(request.state, "request_id", None)
 
 
-def _redirect_to_login(request: Request, db: Session, detail: str) -> RedirectResponse:
+def _redirect_to_login(
+    request: Request,
+    db: Session,
+    detail: AuthzDeniedReason,
+) -> RedirectResponse:
     record_audit_event(db, "authz_denied", request_id=_request_id(request), detail=detail)
     response = RedirectResponse("/login", status_code=status.HTTP_303_SEE_OTHER)
-    if detail == "invalid session":
+    if detail == "invalid_session":
         clear_session_cookie(response, _settings(request))
     return response
 
 
-def current_user_or_redirect(
+def current_user_result(
     request: Request,
     db: Session,
-) -> User | RedirectResponse:
-    """Return current user or a login redirect response."""
+) -> tuple[User | None, AuthzDeniedReason | None]:
+    """Return the authenticated user and a fixed denial reason when unavailable."""
     session_data = get_session_data(request, _settings(request))
     if session_data is None:
-        return _redirect_to_login(request, db, "missing session")
+        return None, "missing_session"
 
     user = get_user_by_id(db, session_data["user_id"])
     if user is None:
-        return _redirect_to_login(request, db, "invalid session")
-    return user
+        return None, "invalid_session"
+    return user, None
 
 
 def transaction_view(db: Session, account: Account, transaction: Transaction) -> dict:
@@ -93,9 +110,9 @@ def dashboard(
     request: Request,
     db: Annotated[Session, Depends(get_db)],
 ) -> HTMLResponse | RedirectResponse:
-    user = current_user_or_redirect(request, db)
-    if isinstance(user, RedirectResponse):
-        return user
+    user, denied_reason = current_user_result(request, db)
+    if user is None:
+        return _redirect_to_login(request, db, denied_reason or "missing_session")
     return _templates(request).TemplateResponse(
         request,
         "banking/dashboard.html",
@@ -108,9 +125,9 @@ def transfer_form(
     request: Request,
     db: Annotated[Session, Depends(get_db)],
 ) -> HTMLResponse | RedirectResponse:
-    user = current_user_or_redirect(request, db)
-    if isinstance(user, RedirectResponse):
-        return user
+    user, denied_reason = current_user_result(request, db)
+    if user is None:
+        return _redirect_to_login(request, db, denied_reason or "missing_session")
     context = {
         **account_context(db, user, limit=5),
         "error": None,
@@ -132,9 +149,9 @@ def transfer_submit(
 ) -> HTMLResponse | RedirectResponse:
     settings = _settings(request)
     require_csrf(request, csrf_token, settings)
-    user = current_user_or_redirect(request, db)
-    if isinstance(user, RedirectResponse):
-        return user
+    user, denied_reason = current_user_result(request, db)
+    if user is None:
+        return _redirect_to_login(request, db, denied_reason or "missing_session")
 
     try:
         perform_transfer(db, user, recipient_username, amount_credits, memo)
@@ -153,10 +170,13 @@ def transfer_submit(
         )
         context = {
             **account_context(db, user, limit=5),
-            "error": str(exc),
-            "recipient_username": recipient_username,
-            "amount_credits": amount_credits,
-            "memo": memo,
+            "error": TRANSFER_ERROR_MESSAGES.get(
+                exc.reason,
+                "Transfer could not be completed.",
+            ),
+            "recipient_username": "",
+            "amount_credits": "",
+            "memo": "",
         }
         return render_form(
             request,
@@ -181,9 +201,9 @@ def transactions(
     request: Request,
     db: Annotated[Session, Depends(get_db)],
 ) -> HTMLResponse | RedirectResponse:
-    user = current_user_or_redirect(request, db)
-    if isinstance(user, RedirectResponse):
-        return user
+    user, denied_reason = current_user_result(request, db)
+    if user is None:
+        return _redirect_to_login(request, db, denied_reason or "missing_session")
     return _templates(request).TemplateResponse(
         request,
         "banking/transactions.html",
