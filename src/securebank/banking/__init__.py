@@ -1,0 +1,1 @@
+"""Fictional banking package placeholder."""

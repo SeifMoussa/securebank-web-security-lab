@@ -1,0 +1,28 @@
+services:
+  web:
+    build:
+      context: .
+    ports:
+      - "127.0.0.1:8000:8000"
+    environment:
+      SECUREBANK_ENV: container
+      SECUREBANK_DEBUG: "false"
+      SECUREBANK_DATABASE_URL: sqlite:////data/securebank_lab.sqlite3
+      SECUREBANK_SECRET_KEY: change-me-for-local-lab-compose-only
+      SECUREBANK_SESSION_COOKIE_NAME: securebank_lab_session
+      SECUREBANK_SESSION_MAX_AGE_SECONDS: "3600"
+      SECUREBANK_CSRF_COOKIE_NAME: securebank_lab_csrf
+      SECUREBANK_CSRF_TOKEN_MAX_AGE_SECONDS: "3600"
+      SECUREBANK_SECURE_COOKIE: "false"
+      SECUREBANK_HSTS_ENABLED: "false"
+    volumes:
+      - securebank-data:/data
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/healthz').read()"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    command: python -m uvicorn securebank.main:app --host 0.0.0.0 --port 8000
+
+volumes:
+  securebank-data:

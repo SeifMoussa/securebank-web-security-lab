@@ -1,0 +1,91 @@
+name: OWASP ZAP Baseline
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  zap-baseline:
+    name: ZAP Baseline Against Local Lab App
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Start local lab app
+        run: docker compose up -d --build
+
+      - name: Wait for health endpoint
+        run: |
+          for attempt in $(seq 1 30); do
+            if python -c "import urllib.request; urllib.request.urlopen('http://localhost:8000/healthz', timeout=2).read()" >/dev/null 2>&1; then
+              exit 0
+            fi
+            sleep 2
+          done
+          docker compose logs --no-color
+          exit 1
+
+      - name: Run ZAP baseline
+        uses: zaproxy/action-baseline@v0.14.0
+        with:
+          target: http://localhost:8000
+          fail_action: false
+          allow_issue_writing: false
+          cmd_options: "-a -I -J zap-report.json -w zap-report.md -r zap-report.html"
+
+      - name: Fail on HIGH findings only
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          report_path = Path("zap-report.json")
+          if not report_path.exists():
+              raise SystemExit("zap-report.json was not created")
+
+          report = json.loads(report_path.read_text(encoding="utf-8"))
+          high_findings = []
+          review_findings = []
+          for site in report.get("site", []):
+              for alert in site.get("alerts", []):
+                  risk = str(alert.get("riskdesc", alert.get("risk", ""))).lower()
+                  name = alert.get("name", "unnamed finding")
+                  if risk.startswith("high"):
+                      high_findings.append(name)
+                  elif risk.startswith(("medium", "warn")):
+                      review_findings.append(name)
+
+          if review_findings:
+              print("WARN/MEDIUM findings for human review:")
+              for finding in review_findings:
+                  print(f"- {finding}")
+
+          if high_findings:
+              print("HIGH findings:")
+              for finding in high_findings:
+                  print(f"- {finding}")
+              raise SystemExit(1)
+
+          print("No HIGH ZAP findings detected.")
+          PY
+
+      - name: Upload ZAP reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: zap-baseline-report
+          path: |
+            zap-report.json
+            zap-report.md
+            zap-report.html
+
+      - name: Docker logs on failure
+        if: failure()
+        run: docker compose logs --no-color
+
+      - name: Stop local lab app
+        if: always()
+        run: docker compose down

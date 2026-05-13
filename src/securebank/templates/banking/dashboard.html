@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - SecureBank Web Security Lab{% endblock %}
+
+{% block content %}
+  <section class="auth-panel">
+    <h1>Lab Dashboard</h1>
+    <p>Signed in as {{ user.username }}.</p>
+
+    {% if account %}
+      <p class="balance">{{ account.balance_credits }} lab credits</p>
+      <p><a href="/transfer">Make a fictional transfer</a></p>
+      <p><a href="/transactions">View transaction history</a></p>
+
+      <h2>Recent Transactions</h2>
+      {% if transactions %}
+        <table>
+          <thead>
+            <tr>
+              <th>Direction</th>
+              <th>Counterparty</th>
+              <th>Amount</th>
+              <th>Memo</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for transaction in transactions %}
+              <tr>
+                <td>{{ transaction.direction }}</td>
+                <td>{{ transaction.counterparty }}</td>
+                <td>{{ transaction.amount_credits }}</td>
+                <td>{{ transaction.memo }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <p>No fictional transactions yet.</p>
+      {% endif %}
+    {% else %}
+      <p>No fictional lab-credit account exists for this user.</p>
+    {% endif %}
+  </section>
+{% endblock %}
