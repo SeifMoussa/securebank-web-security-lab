@@ -38,7 +38,7 @@ jobs:
 
       - name: Upload coverage artifact
         if: always() && hashFiles('coverage.xml') != ''
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: coverage-xml
           path: coverage.xml
@@ -85,7 +85,7 @@ jobs:
 
       - name: Store Docker logs
         if: failure() && hashFiles('docker-compose.log') != ''
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: docker-compose-log
           path: docker-compose.log
