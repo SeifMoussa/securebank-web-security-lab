@@ -4,6 +4,7 @@ All notable changes to this project will be documented here.
 
 ## Unreleased
 
+- Post-publish status update after GitHub Actions CI, Docker smoke, CodeQL, and ZAP baseline completed successfully on GitHub.
 - Phase 9 release preparation, `RELEASE.md`, final release checklist, repository metadata, publishing commands, v0.1.0 release plan, screenshot plan, portfolio copy, and final local validation.
 - Phase 8 final QA covering repository structure, app flows, security controls, tests, workflow configuration, Docker/ZAP pending status, local uvicorn smoke, hygiene checks, and tracking updates.
 - Phase 7 GitHub Actions CI workflow, CodeQL workflow, optional ZAP baseline workflow, Dependabot configuration, reusable documentation check script, workflow YAML validation, and README status updates.

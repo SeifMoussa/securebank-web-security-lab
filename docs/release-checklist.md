@@ -20,23 +20,23 @@ Phase 9 release preparation is complete locally. Do not publish, tag, or create 
 ## Configured But Pending GitHub Verification
 
 - [x] GitHub Actions CI workflow configured.
-- [ ] GitHub Actions CI verified on GitHub.
+- [x] GitHub Actions CI verified on GitHub.
 - [x] CodeQL workflow configured.
-- [ ] CodeQL verified on GitHub.
+- [x] CodeQL verified on GitHub.
 - [x] ZAP baseline workflow configured.
-- [ ] ZAP baseline verified on GitHub.
+- [x] ZAP baseline verified on GitHub.
 - [x] Dependabot configured.
-- [ ] Dependabot verified on GitHub.
+- [x] Dependabot initial update checks ran on GitHub.
 
 ## Docker And ZAP Runtime
 
 - [x] Dockerfile implemented.
 - [x] Docker Compose implemented.
 - [x] Docker smoke scripts implemented.
-- [ ] Docker runtime verified.
-- [ ] ZAP runtime verified.
+- [x] Docker runtime verified through GitHub Actions.
+- [x] ZAP runtime verified through GitHub Actions.
 
-Docker runtime remains pending locally because Docker is not installed or not on PATH.
+Docker runtime remains unavailable locally because Docker is not installed or not on PATH, but it has been verified through GitHub Actions.
 
 ## Safety Checks
 
@@ -52,12 +52,7 @@ Docker runtime remains pending locally because Docker is not installed or not on
 
 ## Pending First-Push Items
 
-- Push repository to GitHub.
 - Confirm README badges resolve.
-- Confirm CI workflow runs.
-- Confirm CodeQL workflow runs.
-- Confirm Docker smoke job runs.
-- Manually run ZAP baseline workflow.
 - Review any CodeQL, Dependabot, or ZAP findings.
 - Add real screenshots if desired.
 - Only then prepare and publish a GitHub release.

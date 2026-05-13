@@ -87,10 +87,10 @@ def check_documented_commands() -> None:
 def check_status_honesty() -> None:
     docs = all_docs_text().lower()
     required_phrases = [
-        "docker runtime verification is pending",
-        "github actions ci is configured but not yet verified on github",
-        "codeql is configured but not yet verified on github",
-        "zap baseline workflow is configured but not yet verified",
+        "docker runtime: verified through github actions docker smoke",
+        "github actions ci: verified on github",
+        "codeql: verified on github",
+        "zap baseline workflow: verified on github",
     ]
     missing = [phrase for phrase in required_phrases if phrase not in docs]
     if missing:

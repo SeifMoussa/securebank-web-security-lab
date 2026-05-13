@@ -173,18 +173,17 @@ Planned real screenshots:
 - ruff format check: passed
 - docs check: passed
 - Docker files and smoke scripts: implemented
-- Docker runtime: pending locally until run on a Docker-capable machine or CI runner
-- GitHub Actions CI is configured but not yet verified on GitHub
-- CodeQL is configured but not yet verified on GitHub
-- ZAP baseline workflow is configured but not yet verified until its first GitHub run
+- Docker runtime: verified through GitHub Actions Docker smoke
+- GitHub Actions CI: verified on GitHub
+- CodeQL: verified on GitHub
+- ZAP baseline workflow: verified on GitHub
 
 ## Known Limitations
 
 - This is a local portfolio lab, not production software.
 - No real money, payment integration, customer data, or financial identifiers.
-- Docker runtime has not been verified in this environment.
-- CI, CodeQL, and ZAP workflows are configured but not yet verified on GitHub.
-- Dependabot is configured but not yet verified on GitHub.
+- Docker runtime is still unavailable on this local machine, but it is verified through GitHub Actions.
+- Dependabot is configured and opened initial update checks on GitHub.
 
 ## License
 

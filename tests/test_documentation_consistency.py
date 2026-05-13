@@ -42,11 +42,10 @@ def test_documented_commands_match_makefile_and_pyproject() -> None:
 def test_docs_keep_runtime_and_ci_status_honest() -> None:
     docs = read_docs().lower()
 
-    assert "docker runtime verification is pending" in docs
-    assert "github actions ci is configured but not yet verified on github" in docs
-    assert "codeql is configured but not yet verified on github" in docs
-    assert "zap baseline workflow is configured but not yet verified" in docs
-    assert "docker runtime: pending locally" in docs
+    assert "docker runtime: verified through github actions docker smoke" in docs
+    assert "github actions ci: verified on github" in docs
+    assert "codeql: verified on github" in docs
+    assert "zap baseline workflow: verified on github" in docs
     assert "docker runtime verification passed" not in docs
     assert "ci passed" not in docs
     assert "codeql passed" not in docs

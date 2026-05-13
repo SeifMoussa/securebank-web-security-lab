@@ -21,16 +21,17 @@
 - [x] Audit logging tests
 - [x] Docker Compose files and smoke scripts
 - [x] Documentation
-- [ ] Docker smoke verification
+- [x] Docker smoke verification on GitHub Actions
 - [x] GitHub Actions CI workflow configured
-- [ ] GitHub Actions CI verified on GitHub
+- [x] GitHub Actions CI verified on GitHub
 - [x] CodeQL workflow configured
-- [ ] CodeQL verified on GitHub
+- [x] CodeQL verified on GitHub
 - [x] Optional ZAP baseline workflow configured
-- [ ] Optional ZAP baseline verified on GitHub
+- [x] Optional ZAP baseline verified on GitHub
 - [x] Dependabot configured
+- [x] Dependabot initial update checks ran on GitHub
 - [x] Final QA
 - [x] Release preparation
-- [ ] Manual GitHub publishing
+- [x] Manual GitHub publishing
 - [ ] v0.1.0 tag created
 - [ ] GitHub release created

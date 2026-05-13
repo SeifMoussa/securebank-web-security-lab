@@ -284,3 +284,27 @@ Results:
 - GitHub Actions CI, CodeQL, ZAP, and Dependabot remain pending until first GitHub run.
 
 Final command results are recorded in the Phase 9 final report.
+
+## Post-Publish Results
+
+Date: 2026-05-14
+
+GitHub repository:
+
+- `https://github.com/SeifMoussa/securebank-web-security-lab`
+
+Results after pushing to `main`:
+
+- GitHub Actions CI: success.
+- Backend tests job: success.
+- Documentation checks job: success.
+- Docker smoke job: success.
+- CodeQL: success.
+- OWASP ZAP baseline: success after report-handling workflow fix.
+- Dependabot initial update checks: ran on GitHub.
+
+Notes:
+
+- The first ZAP run failed due to workflow report filename handling, not a HIGH finding.
+- The ZAP workflow was fixed to use the action's default report files and target `/login`.
+- The corrected ZAP run completed successfully.
