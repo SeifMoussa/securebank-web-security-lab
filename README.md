@@ -9,6 +9,14 @@
 
 SecureBank Web Security Lab is a deliberately small server-rendered FastAPI application for demonstrating secure software engineering practices in a recruiter-friendly portfolio project. It uses fictional users, fictional accounts, and integer "lab credits" only.
 
+## Why I Built This
+
+I wanted a small application where security decisions were visible in the code and test suite, not just listed in a checklist. A fictional banking flow gave me useful boundaries to work against: authentication, authorization, transfers, audit events, and hostile input all matter, while no real financial data or payment rails are involved. I used the OWASP Top 10 as a coverage map, then backed the controls with security-focused tests and a ZAP baseline rather than treating the mapping itself as proof.
+
+## What Was Harder Than Expected
+
+Authentication safety was the part with the most edge cases. Adding Argon2id hashing was straightforward; making login failures generic, doing dummy verification for unknown users, handling signed sessions, and testing tampered cookies required more care. The fictional transfer path also needed deliberate transaction boundaries so a failed write could not leave the lab-credit balances half-updated. Keeping the ZAP baseline useful without presenting every scanner warning as an exploitable finding was another judgment call, which is why its workflow keeps a report for review.
+
 ## What It Demonstrates
 
 - Defensive authentication design with Argon2id password hashing.
@@ -180,10 +188,38 @@ Planned real screenshots:
 
 ## Known Limitations
 
-- This is a local portfolio lab, not production software.
-- No real money, payment integration, customer data, or financial identifiers.
-- Docker runtime is still unavailable on this local machine, but it is verified through GitHub Actions.
-- Dependabot is configured and opened initial update checks on GitHub.
+- This is a fictional banking security lab, not a production banking system.
+- It has no real payment rails, bank integrations, customer data, or financial identifiers; the seeded users and lab-credit balances are demo data only.
+- Deployment hardening is limited. The repository demonstrates configurable secure cookies and HSTS, but it does not provide production secrets management, infrastructure isolation, monitoring, backups, or disaster recovery.
+- The OWASP Top 10 mapping, security tests, and ZAP baseline provide useful coverage, but they are not a substitute for a threat-model review, manual penetration test, or production risk assessment.
+- Docker runtime is unavailable on the machine used for the local project notes; the Docker smoke and ZAP baseline paths are exercised through GitHub Actions.
+
+## What I Would Improve Next
+
+My next step would be to add a repeatable hardened deployment example with external secret injection, TLS termination, persistent database backups, and observable audit-event handling. I would also add explicit login throttling and session revocation, then extend the security tests around those controls. For scanner coverage, I would review and document ZAP baseline changes over time instead of letting the workflow become a badge that nobody reads.
+
+## How to Verify It Works
+
+Install the development dependencies, then run the same local checks used by the repository:
+
+```bash
+python -m pip install -e ".[dev]"
+python -m pytest
+python -m ruff check .
+python -m ruff format --check .
+python scripts/check-docs.py
+```
+
+For a runtime check on a machine with Docker, use the repository's Compose configuration and verify the health endpoint:
+
+```bash
+docker compose build
+docker compose up -d
+curl http://localhost:8000/healthz
+docker compose down
+```
+
+The ZAP baseline is defined in `.github/workflows/zap-baseline.yml` and runs against the local lab app in GitHub Actions. Review that workflow's uploaded report as well as its status; a green baseline is not a claim that the application is production-ready.
 
 ## License
 
