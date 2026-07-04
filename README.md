@@ -15,7 +15,7 @@ I wanted a small application where security decisions were visible in the code a
 
 ## What Was Harder Than Expected
 
-Authentication safety was the part with the most edge cases. Adding Argon2id hashing was straightforward; making login failures generic, doing dummy verification for unknown users, handling signed sessions, and testing tampered cookies required more care. The fictional transfer path also needed deliberate transaction boundaries so a failed write could not leave the lab-credit balances half-updated. Keeping the ZAP baseline useful without presenting every scanner warning as an exploitable finding was another judgment call, which is why its workflow keeps a report for review.
+Authentication safety was the part with the most edge cases. Adding Argon2id hashing was straightforward. Making login failures generic, doing dummy verification for unknown users, handling signed sessions, and testing tampered cookies required more care. The fictional transfer path also needed deliberate transaction boundaries so a failed write could not leave the lab-credit balances half-updated. Keeping the ZAP baseline useful without presenting every scanner warning as an exploitable finding was another judgment call, which is why its workflow keeps a report for review.
 
 ## What It Demonstrates
 
