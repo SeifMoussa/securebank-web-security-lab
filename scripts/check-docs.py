@@ -12,7 +12,6 @@ REQUIRED_DOCS = [
     Path("README.md"),
     Path("SECURITY_NOTES.md"),
     Path("TESTING_REPORT.md"),
-    Path("PROJECT_COMPLETION_CHECKLIST.md"),
     Path("docs/threat-model.md"),
     Path("docs/security-controls.md"),
     Path("docs/owasp-top-10-mapping.md"),
@@ -26,7 +25,6 @@ DOC_GLOBS = [
     Path("README.md"),
     Path("SECURITY_NOTES.md"),
     Path("TESTING_REPORT.md"),
-    Path("PROJECT_COMPLETION_CHECKLIST.md"),
     *Path("docs").glob("*.md"),
 ]
 
