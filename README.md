@@ -7,7 +7,7 @@
 
 **Fictional lab-only project.** This is not a real bank, does not move real money, does not connect to payment systems, and must not contain real customer data or real financial identifiers.
 
-SecureBank Web Security Lab is a deliberately small server-rendered FastAPI application for demonstrating secure software engineering practices in a recruiter-friendly portfolio project. It uses fictional users, fictional accounts, and integer "lab credits" only.
+SecureBank Web Security Lab is a deliberately small server-rendered FastAPI application for demonstrating secure software engineering practices in a security engineering lab. It uses fictional users, fictional accounts, and integer "lab credits" only.
 
 ## Why I Built This
 
