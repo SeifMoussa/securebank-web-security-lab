@@ -1,6 +1,6 @@
 # Release Checklist
 
-Phase 9 release preparation is complete locally. Do not publish, tag, or create a release until manual approval is given.
+Release preparation is complete locally. Do not publish, tag, or create a release until manual approval is given.
 
 ## Local Completion
 
