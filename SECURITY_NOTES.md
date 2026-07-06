@@ -2,7 +2,7 @@
 
 This project is intentionally scoped as a fictional, lab-only defensive security portfolio project.
 
-Implemented Phase 2 controls:
+Implemented authentication controls:
 
 - Authentication routes for registration, login, logout, and a minimal authenticated page.
 - Username validation for 3-32 characters using letters, numbers, and underscore.
@@ -20,7 +20,7 @@ Implemented Phase 2 controls:
 - Audit events for registration success/failure, login success/failure, logout, and authorization denial.
 - Request IDs attached to responses and audit events where available.
 
-Implemented Phase 3 controls:
+Implemented fictional transaction controls:
 
 - Fictional lab-credit account model owned by a user.
 - Fictional transaction model using internal integer IDs only.
@@ -33,7 +33,7 @@ Implemented Phase 3 controls:
 - Transfer memos are rendered through Jinja2 autoescape.
 - Audit events for transfer success, transfer failure, insufficient funds, recipient not found, and authorization denial.
 
-Tested Phase 4 security coverage:
+Tested security coverage:
 
 - SQL injection defenses are tested with harmless malicious-looking login, recipient lookup, and memo inputs.
 - Source scans check for raw SQL execution and string-concatenated SQL patterns.
@@ -45,7 +45,7 @@ Tested Phase 4 security coverage:
 - Static safety scans check for unsafe template filters, raw SQL patterns, real financial identifier examples, and committed secret material.
 - OWASP Top 10 mapping documents A01-A10, with A10 SSRF honestly marked out of scope because the app performs no outbound HTTP requests.
 
-Phase 5 Docker/runtime notes:
+Docker and runtime status:
 
 - Dockerfile uses Python 3.12 slim and runs the app with `python -m uvicorn`.
 - Container runtime uses a non-root `securebank` user.
@@ -55,14 +55,14 @@ Phase 5 Docker/runtime notes:
 - Compose defaults are lab-only placeholders and are not production secrets.
 - Docker runtime verification is pending in this environment because Docker is not installed or not on PATH.
 
-Phase 6 documentation notes:
+Documentation status:
 
-- README and docs now describe implemented controls, tests, limitations, and pending phases.
+- README and docs describe implemented controls, tests, limitations, and remaining verification work.
 - Documentation explicitly states that Docker runtime verification is pending locally.
 - Documentation explicitly states that GitHub Actions CI, CodeQL, and ZAP are configured but not yet verified on GitHub.
 - Documentation consistency tests check local links, documented commands, status honesty, and absence of real financial identifier examples.
 
-Phase 7 CI/ZAP safety notes:
+CI and ZAP safety status:
 
 - GitHub Actions CI is configured but not yet verified on GitHub.
 - CodeQL is configured but not yet verified on GitHub.
@@ -71,13 +71,13 @@ Phase 7 CI/ZAP safety notes:
 - ZAP policy remains: fail on HIGH findings only, document WARN/MEDIUM findings for human review.
 - Dependabot is configured for weekly pip, GitHub Actions, and Docker ecosystem updates.
 
-Phase 8 QA notes:
+QA status:
 
 - Final QA verified core app flows, security controls, workflow configuration, documentation honesty, and local uvicorn smoke behavior.
 - Docker and ZAP runtime verification remain pending because Docker is not installed or not on PATH locally.
 - No GitHub Actions, CodeQL, or ZAP success is claimed before GitHub execution.
 
-Phase 9 release safety notes:
+Release safety status:
 
 - GitHub publishing is complete.
 - No tag or GitHub release was created.

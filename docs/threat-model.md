@@ -1,6 +1,6 @@
 # Threat Model
 
-This threat model covers the fictional SecureBank Web Security Lab application as of Phase 6.
+This threat model covers the implemented fictional SecureBank Web Security Lab application.
 
 ## Scope
 
