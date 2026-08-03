@@ -175,14 +175,45 @@ scripts/         Docker smoke verification scripts
 
 ## Screenshots
 
-Screenshots are pending. No fake screenshots are included.
+All screenshots below are captured from the actual running app (Playwright against the local dev server), using the seeded demo accounts. No fake or mocked screenshots are included.
 
-Planned real screenshots:
+<p align="center">
+  <img src="docs/screenshots/01-login-empty.png" width="500" alt="Sign-in page, empty form">
+</p>
 
-- Login page
-- Dashboard
-- Transfer form
-- Transaction history
+*Login page — generic error handling and dummy password verification for unknown users happen server-side; the form itself stays simple.*
+
+<p align="center">
+  <img src="docs/screenshots/02-dashboard-alice.png" width="600" alt="Dashboard for demo user alice, showing balance and a recent transaction">
+</p>
+
+*Dashboard for demo user `alice` — lab-credit balance and a real fictional transaction from an actual transfer, not placeholder data.*
+
+<p align="center">
+  <img src="docs/screenshots/03-transfer-form.png" width="500" alt="Fictional transfer form">
+</p>
+
+*Transfer form — CSRF-protected, session-scoped to the authenticated sender, backed by an atomic debit/credit/transaction write.*
+
+The next three screenshots walk through the TOTP-based MFA module end to end, using the admin-tier demo account `dana_admin`:
+
+<p align="center">
+  <img src="docs/screenshots/04-admin-mfa-enroll.png" width="500" alt="MFA enrollment page showing the provisioning URI and secret">
+</p>
+
+*First login as `dana_admin` triggers mandatory MFA enrollment — the provisioning URI and secret shown here are for a demo account only.*
+
+<p align="center">
+  <img src="docs/screenshots/05-mfa-recovery-codes.png" width="500" alt="One-time recovery codes page shown immediately after enrollment">
+</p>
+
+*Recovery codes are shown exactly once, immediately after enrollment, and stored only as hashes afterward. The codes captured in this screenshot were rotated out (new TOTP secret and recovery codes generated via `activate_mfa`) right after this screenshot was taken, so the values visible above are no longer valid.*
+
+<p align="center">
+  <img src="docs/screenshots/06-admin-mfa-challenge.png" width="500" alt="MFA challenge page for an already-enrolled admin account">
+</p>
+
+*Logging back in as the now-enrolled `dana_admin` goes to the code-entry challenge instead of enrollment — the same form accepts either a TOTP code or a single-use recovery code.*
 
 ## Current Verification Status
 
