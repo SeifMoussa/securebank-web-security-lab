@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}Verify - SecureBank Web Security Lab{% endblock %}
+
+{% block content %}
+  <section class="auth-panel">
+    <h1>Verify Your Identity</h1>
+    {% if error %}
+      <p class="error" role="alert">{{ error }}</p>
+    {% endif %}
+    <form method="post" action="/mfa/challenge">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <label for="code">Authenticator code or recovery code</label>
+      <input id="code" name="code" autocomplete="one-time-code" required>
+
+      <button type="submit">Verify</button>
+    </form>
+  </section>
+{% endblock %}

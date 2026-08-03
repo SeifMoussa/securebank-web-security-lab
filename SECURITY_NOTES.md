@@ -19,6 +19,10 @@ Implemented authentication controls:
 - Optional HSTS controlled by settings.
 - Audit events for registration success/failure, login success/failure, logout, and authorization denial.
 - Request IDs attached to responses and audit events where available.
+- Admin-tier accounts (`role="admin"`) must complete a TOTP challenge before a session is issued.
+- First-time admin login carries the unconfirmed TOTP secret inside a short-lived (10 minute) signed pending token; nothing is persisted until a valid code is presented.
+- TOTP replay protection rejects any code at or before the user's last verified time-step, not just an exact resubmission.
+- Single-use, Argon2id-hashed recovery codes are generated at enrollment, shown once, and regenerating them replaces the full set instead of appending.
 
 Implemented fictional transaction controls:
 

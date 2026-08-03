@@ -29,6 +29,10 @@ class Settings(BaseSettings):
     login_lockout_enabled: bool = False
     login_lockout_max_attempts: int = 5
     login_lockout_window_seconds: int = 900
+    mfa_pending_cookie_name: str = "securebank_lab_mfa_pending"
+    mfa_pending_max_age_seconds: int = 600
+    mfa_issuer: str = "SecureBank Lab"
+    mfa_recovery_code_count: int = 8
     seed_demo_data: bool = True
 
 

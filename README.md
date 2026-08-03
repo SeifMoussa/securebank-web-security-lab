@@ -20,6 +20,7 @@ Authentication safety was the part with the most edge cases. Adding Argon2id has
 ## What It Demonstrates
 
 - Defensive authentication design with Argon2id password hashing.
+- TOTP-based multi-factor authentication for a higher-privilege role tier, with recovery codes and replay-resistant verification.
 - Signed session cookies and CSRF protection for server-rendered forms.
 - SQL injection prevention through SQLAlchemy expression APIs and static checks.
 - XSS prevention through global Jinja2 autoescape, CSP, and template scans.
@@ -33,7 +34,9 @@ Authentication safety was the part with the most edge cases. Adding Argon2id has
 ## Current Features
 
 - Register, login, logout, and authenticated landing page.
+- TOTP-based MFA enrollment and login challenge for the admin-tier demo account, with single-use recovery codes.
 - Demo users `alice`, `bob`, and `carol` with fictional lab-credit accounts.
+- Demo admin user `dana_admin` (not yet MFA-enrolled) to exercise the enrollment flow.
 - Dashboard showing the current user's lab-credit balance and recent transactions.
 - Fictional transfer flow between demo users.
 - Transaction history page.
@@ -48,6 +51,7 @@ Authentication safety was the part with the most edge cases. Adding Argon2id has
 - SQLite
 - Pydantic v2 and pydantic-settings
 - Argon2id via `argon2-cffi`
+- TOTP via `pyotp`
 - `itsdangerous` signed tokens
 - Plain CSS
 - pytest
@@ -59,6 +63,7 @@ Verified on GitHub: GitHub Actions CI, CodeQL, Docker smoke, and OWASP ZAP basel
 ## Security Controls
 
 - Argon2id password hashing.
+- TOTP-based MFA enforced at login for the admin role tier, with replay-resistant verification and single-use recovery codes.
 - Generic login failure message.
 - Dummy password verification for missing users to reduce username enumeration risk.
 - Signed HttpOnly SameSite=Strict session cookies.
@@ -106,6 +111,12 @@ Demo password for seeded users:
 
 ```text
 LabDemo123!
+```
+
+Demo password for the admin-tier user (`dana_admin`), who will be prompted to enroll in MFA on first login:
+
+```text
+LabAdmin123!
 ```
 
 ## Docker Quick Start

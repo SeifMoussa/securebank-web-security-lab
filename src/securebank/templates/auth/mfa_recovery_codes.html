@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Recovery Codes - SecureBank Web Security Lab{% endblock %}
+
+{% block content %}
+  <section class="auth-panel">
+    <h1>Save Your Recovery Codes</h1>
+    <p>MFA is now active on your account. Each code below can be used once if you lose access to your
+      authenticator app. They are shown only this one time and are not stored in plain text.</p>
+    <ul>
+      {% for recovery_code in recovery_codes %}
+        <li><code>{{ recovery_code }}</code></li>
+      {% endfor %}
+    </ul>
+    <p><a href="/me">Continue to your account</a></p>
+  </section>
+{% endblock %}

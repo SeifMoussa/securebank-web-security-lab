@@ -21,10 +21,15 @@ class User(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     username: Mapped[str] = mapped_column(String(32), unique=True, index=True, nullable=False)
     password_hash: Mapped[str] = mapped_column(String(255), nullable=False)
+    role: Mapped[str] = mapped_column(String(16), nullable=False, default="customer")
+    mfa_enabled: Mapped[bool] = mapped_column(default=False, nullable=False)
+    totp_secret: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    mfa_last_verified_step: Mapped[int | None] = mapped_column(Integer, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utc_now)
 
     audit_events: Mapped[list["AuditEvent"]] = relationship(back_populates="user")
     accounts: Mapped[list["Account"]] = relationship(back_populates="user")
+    recovery_codes: Mapped[list["MfaRecoveryCode"]] = relationship(back_populates="user")
 
 
 class AuditEvent(Base):
@@ -41,6 +46,20 @@ class AuditEvent(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utc_now)
 
     user: Mapped[User | None] = relationship(back_populates="audit_events")
+
+
+class MfaRecoveryCode(Base):
+    """Single-use TOTP recovery code for a user."""
+
+    __tablename__ = "mfa_recovery_codes"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False, index=True)
+    code_hash: Mapped[str] = mapped_column(String(255), nullable=False)
+    used_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utc_now)
+
+    user: Mapped[User] = relationship(back_populates="recovery_codes")
 
 
 class Account(Base):
