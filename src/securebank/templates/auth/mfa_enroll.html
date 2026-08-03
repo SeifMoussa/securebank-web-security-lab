@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}Set Up MFA - SecureBank Web Security Lab{% endblock %}
+
+{% block content %}
+  <section class="auth-panel">
+    <h1>Set Up Multi-Factor Authentication</h1>
+    <p>Your role requires an authenticator app before you can finish signing in.</p>
+    {% if error %}
+      <p class="error" role="alert">{{ error }}</p>
+    {% endif %}
+    <p>Add this account to an authenticator app (Google Authenticator, Authy, or similar), either by scanning
+      a QR code generated from the URI below or by entering the secret manually.</p>
+    <p><code>{{ provisioning_uri }}</code></p>
+    <p>Secret: <code>{{ secret }}</code></p>
+    <form method="post" action="/mfa/enroll">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <label for="code">Enter the current 6-digit code</label>
+      <input id="code" name="code" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code" required>
+
+      <button type="submit">Confirm and finish sign-in</button>
+    </form>
+  </section>
+{% endblock %}

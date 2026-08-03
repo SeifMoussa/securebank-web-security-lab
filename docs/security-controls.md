@@ -16,6 +16,19 @@ Tests:
 - `tests/test_auth.py`
 - `tests/test_passwords.py`
 
+## Multi-Factor Authentication
+
+- Admin-tier accounts (`role="admin"`) must complete a TOTP challenge before a session is issued; customer-tier accounts are unaffected.
+- After a correct password, the account is placed in a short-lived (10 minute) signed "pending" state distinct from the real session cookie, using its own salt and cookie.
+- First-time admin login carries the unconfirmed TOTP secret inside the signed pending token itself; nothing is written to the database until the user proves possession of it with a valid code.
+- TOTP verification tracks the last verified time-step per user and rejects any code at or before that step, not just an exact repeat of the previous submission, to prevent replay within the same validity window.
+- Recovery codes are generated once at enrollment, hashed with Argon2id, shown to the user exactly once, and each is single-use. Regenerating them (via `activate_mfa`) replaces the full set rather than appending to it.
+- A recovery code can be used in place of a TOTP code at the login challenge.
+
+Tests:
+
+- `tests/test_mfa.py`
+
 ## Sessions
 
 - Sessions are signed with `itsdangerous`.

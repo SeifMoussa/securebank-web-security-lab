@@ -4,6 +4,8 @@ All notable changes to this project will be documented here.
 
 ## Unreleased
 
+- Added TOTP-based multi-factor authentication for the admin role tier: enrollment with a signed pending-login state, a login-time challenge, replay-resistant verification, and single-use recovery codes.
+- Reworded changelog, testing report, and release checklist to drop leftover internal phase narration and a stale reference to a deleted release-notes file.
 - Confirmed GitHub Actions CI, Docker smoke, CodeQL, and ZAP baseline all pass on GitHub after the initial publish.
 - Added release preparation notes, repository metadata, publishing commands, the v0.1.0 release plan, and a final local validation pass.
 - Ran a final QA pass over repository structure, app flows, security controls, tests, and workflow configuration, plus local uvicorn smoke checks and general hygiene cleanup.

@@ -7,11 +7,13 @@ from securebank.models import Account, User
 from securebank.security.passwords import hash_password
 
 DEMO_PASSWORD = "LabDemo123!"
+DEMO_ADMIN_PASSWORD = "LabAdmin123!"
 DEMO_USERS = (
     ("alice", 5000),
     ("bob", 3000),
     ("carol", 2500),
 )
+DEMO_ADMIN_USERNAME = "dana_admin"
 
 
 def seed_demo_data(db: Session) -> None:
@@ -26,5 +28,15 @@ def seed_demo_data(db: Session) -> None:
         account = db.scalar(select(Account).where(Account.user_id == user.id))
         if account is None:
             db.add(Account(user_id=user.id, balance_credits=balance_credits))
+
+    admin = db.scalar(select(User).where(User.username == DEMO_ADMIN_USERNAME))
+    if admin is None:
+        db.add(
+            User(
+                username=DEMO_ADMIN_USERNAME,
+                password_hash=hash_password(DEMO_ADMIN_PASSWORD),
+                role="admin",
+            )
+        )
 
     db.commit()

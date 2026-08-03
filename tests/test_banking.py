@@ -56,14 +56,24 @@ def transfer(
 
 
 def test_seed_data_creates_users_and_accounts(seeded_db: Session) -> None:
-    users = seeded_db.scalars(select(User).order_by(User.username)).all()
+    customers = seeded_db.scalars(
+        select(User).where(User.role == "customer").order_by(User.username)
+    ).all()
     accounts = seeded_db.scalars(select(Account)).all()
 
-    assert [user.username for user in users] == ["alice", "bob", "carol"]
+    assert [user.username for user in customers] == ["alice", "bob", "carol"]
     assert len(accounts) == 3
     assert get_account(seeded_db, "alice").balance_credits == 5000
     assert get_account(seeded_db, "bob").balance_credits == 3000
     assert get_account(seeded_db, "carol").balance_credits == 2500
+
+
+def test_seed_data_creates_demo_admin_without_mfa_enrolled(seeded_db: Session) -> None:
+    admin = seeded_db.scalar(select(User).where(User.username == "dana_admin"))
+
+    assert admin is not None
+    assert admin.role == "admin"
+    assert admin.mfa_enabled is False
 
 
 def test_authenticated_user_can_view_dashboard(seeded_client: TestClient) -> None:

@@ -34,6 +34,7 @@ This threat model covers the implemented fictional SecureBank Web Security Lab a
 
 - Anonymous visitor: can view login and register forms.
 - Authenticated lab user: can view their own dashboard and create fictional transfers from their own account.
+- Admin-tier user: a higher-privilege role that must complete a TOTP challenge before a session is issued.
 - Reviewer or recruiter: can inspect code, tests, and documentation.
 - Local developer: can run the app, tests, and Docker artifacts.
 - Malicious local test actor: represented only by harmless test inputs against the local app.
@@ -57,6 +58,9 @@ This threat model covers the implemented fictional SecureBank Web Security Lab a
 - Submitting missing or invalid CSRF tokens.
 - Attempting self-transfers, negative amounts, zero amounts, excessive amounts, or unknown recipients.
 - Attempting to leak plaintext passwords or session tokens through audit events.
+- Attempting to reuse a TOTP code that already completed an admin login.
+- Attempting to skip the MFA challenge and reach an admin session with only a password.
+- Attempting to reuse an already-consumed MFA recovery code.
 
 ## Mitigations
 
@@ -73,6 +77,7 @@ This threat model covers the implemented fictional SecureBank Web Security Lab a
 - Server-side authorization from the authenticated session.
 - Atomic transfer service with rollback on persistence failure.
 - Audit logging for important auth, authorization, and transfer events.
+- TOTP-based MFA required for admin-tier accounts, with a signed short-lived pending state, per-user replay tracking, and single-use hashed recovery codes.
 - Static tests for raw SQL patterns, unsafe template filters, real financial identifiers, and committed secret material.
 
 ## Residual Risks
