@@ -1,4 +1,4 @@
-"""Input validation helpers for Phase 2."""
+"""Input validation helpers."""
 
 import re
 
@@ -14,7 +14,7 @@ def validate_username(username: str) -> str:
 
 
 def validate_password_strength(password: str) -> None:
-    """Validate Phase 2 password complexity requirements."""
+    """Validate password complexity requirements."""
     if len(password) < 12:
         raise ValueError("Password must be at least 12 characters.")
     if not any(char.isupper() for char in password):

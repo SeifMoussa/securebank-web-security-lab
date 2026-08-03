@@ -1,58 +1,38 @@
 # Release Checklist
 
-Release preparation is complete locally. Do not publish, tag, or create a release until manual approval is given.
+Use this checklist before tagging a new release. It is a working template, not a log of past releases — see `TESTING_REPORT.md` and `CHANGELOG.md` for what has already shipped.
 
-## Local Completion
+## Local Checks
 
-- [x] Code complete for v0.1.0 release candidate.
-- [x] Tests passing locally.
-- [x] Coverage passing locally.
-- [x] Ruff lint passing locally.
-- [x] Ruff format check passing locally.
-- [x] Documentation complete for current scope.
-- [x] README honest and complete.
-- [x] CHANGELOG updated.
-- [x] TESTING_REPORT updated.
-- [x] SECURITY_NOTES updated.
-- [x] RELEASE.md created.
-- [x] No fake screenshots included.
+- [ ] `python -m pytest` passes.
+- [ ] `python -m pytest --cov=securebank --cov-report=term-missing --cov-fail-under=80` passes.
+- [ ] `python -m ruff check .` passes.
+- [ ] `python -m ruff format --check .` passes.
+- [ ] `python scripts/check-docs.py` passes.
+- [ ] CHANGELOG, TESTING_REPORT, and SECURITY_NOTES reflect the current state.
+- [ ] README badges and local doc links resolve.
 
-## Configured But Pending GitHub Verification
+## GitHub Checks
 
-- [x] GitHub Actions CI workflow configured.
-- [x] GitHub Actions CI verified on GitHub.
-- [x] CodeQL workflow configured.
-- [x] CodeQL verified on GitHub.
-- [x] ZAP baseline workflow configured.
-- [x] ZAP baseline verified on GitHub.
-- [x] Dependabot configured.
-- [x] Dependabot initial update checks ran on GitHub.
+- [ ] GitHub Actions CI is green on the release branch.
+- [ ] CodeQL is green.
+- [ ] ZAP baseline is green, and any WARN/MEDIUM findings have been reviewed.
+- [ ] Dependabot has no unreviewed open alerts.
 
-## Docker And ZAP Runtime
+## Docker
 
-- [x] Dockerfile implemented.
-- [x] Docker Compose implemented.
-- [x] Docker smoke scripts implemented.
-- [x] Docker runtime verified through GitHub Actions.
-- [x] ZAP runtime verified through GitHub Actions.
-
-Docker runtime remains unavailable locally because Docker is not installed or not on PATH, but it has been verified through GitHub Actions.
+- [ ] `docker compose build` and `docker compose up -d` succeed.
+- [ ] `/healthz` responds after `docker compose up -d`.
+- [ ] Smoke scripts (`scripts/verify-docker.sh`, `scripts/smoke-test.ps1`) pass.
 
 ## Safety Checks
 
-- [x] No real customer data.
-- [x] No real banking identifiers.
-- [x] No real payment integrations.
-- [x] No real money movement.
-- [x] No offensive tooling.
-- [x] Safe test payload language documented.
-- [x] No `.env` committed.
-- [x] No SQLite database should be committed.
-- [x] Local ignored `securebank_lab.sqlite3` is development runtime state only.
+- [ ] No real customer data, banking identifiers, payment integrations, or money movement introduced.
+- [ ] No `.env` or local SQLite database committed.
+- [ ] No offensive tooling added.
 
-## Pending First-Push Items
+## Before Tagging
 
-- Confirm README badges resolve.
-- Review any CodeQL, Dependabot, or ZAP findings.
-- Add real screenshots if desired.
-- Only then prepare and publish a GitHub release.
+- [ ] Review the full diff since the last tag.
+- [ ] Confirm the version bump in `pyproject.toml`.
+- [ ] Only then create the GitHub release.

@@ -1,4 +1,4 @@
-"""Database models for Phase 2."""
+"""Database models."""
 
 from datetime import UTC, datetime
 
