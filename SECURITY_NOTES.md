@@ -82,7 +82,6 @@ Release safety status:
 - GitHub publishing is complete.
 - No tag or GitHub release was created.
 - GitHub Actions CI, Docker smoke, CodeQL, and ZAP baseline have run successfully on GitHub.
-- `RELEASE.md` documents manual publishing commands, post-push checks, screenshot policy, and recruiter-facing portfolio copy.
 
 Important limitations:
 

@@ -91,15 +91,13 @@ def test_successful_transfer_updates_balances_and_records_transaction(
     alice_before = get_account(seeded_db, "alice").balance_credits
     bob_before = get_account(seeded_db, "bob").balance_credits
 
-    response = transfer(seeded_client, "bob", "250", "Phase 3 lab memo")
+    response = transfer(seeded_client, "bob", "250", "rent split")
 
     seeded_db.expire_all()
     assert response.status_code == 303
     assert get_account(seeded_db, "alice").balance_credits == alice_before - 250
     assert get_account(seeded_db, "bob").balance_credits == bob_before + 250
-    transaction = seeded_db.scalar(
-        select(Transaction).where(Transaction.memo == "Phase 3 lab memo")
-    )
+    transaction = seeded_db.scalar(select(Transaction).where(Transaction.memo == "rent split"))
     assert transaction is not None
     assert transaction.amount_credits == 250
 
